@@ -2,7 +2,9 @@
 
 import { validatePassword } from '../service/user.service'
 import { Request, Response } from 'express'
-import { createSession } from '../service/session.service'
+import { createAccessToken, createSession } from '../service/session.service'
+import config from 'config'
+import { sign } from '../utils/jwt.utils'
 
 export async function createUserSessionHandler(req: Request, res: Response) {
   // Validate the email and password
@@ -15,6 +17,16 @@ export async function createUserSessionHandler(req: Request, res: Response) {
   const session = await createSession(user._id, req.get('user-agent') || '')
 
   // Create access token
+  const accessToken = createAccessToken({
+    user,
+    session
+  })
+
   // Create refresh Token
+  const refreshToken = sign(session, {
+    expiresIn: config.get('refreshTokenTtl')
+  })
+
   // Send refresh & Access token back
+  return res.send({ accessToken, refreshToken })
 }
