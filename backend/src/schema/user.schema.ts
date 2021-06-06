@@ -19,7 +19,6 @@ export const createUserSchema = object({
 
 export const createUserSessionSchema = object({
   body: object({
-    name: string().required('Name is required'),
     password: string()
       .required('Password is require')
       .min(6, 'Password is too short - should be 6 chars minimum.')
