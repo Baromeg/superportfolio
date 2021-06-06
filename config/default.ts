@@ -3,5 +3,6 @@
 export default {
   port: 5002,
   host: 'localhost',
-  dbUri: 'mongodb://localhost/portfolioDB-development'
+  dbUri: 'mongodb://localhost/portfolioDB-development',
+  saltWorkFactor: 10
 }
