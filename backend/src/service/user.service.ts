@@ -1,7 +1,8 @@
 // * 7 - Create the service functions
 
 import { omit } from 'lodash'
-import { DocumentDefinition } from 'mongoose'
+import { DocumentDefinition, FilterQuery, UpdateQuery } from 'mongoose'
+import { SessionDocumentInterface } from '../model/session.model'
 import User, { UserDocumentInterface } from '../model/user.model'
 
 export async function createUser(
@@ -39,4 +40,11 @@ export async function validatePassword({
   }
 
   return omit(user.toJSON(), 'password')
+}
+
+export async function updateSession(
+  query: FilterQuery<SessionDocumentInterface>,
+  update: UpdateQuery<SessionDocumentInterface>
+) {
+  return Session.updateOne(query, update)
 }

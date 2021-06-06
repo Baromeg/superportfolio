@@ -28,4 +28,5 @@ export default function (app: Express) {
 
   // Logout
   // DELETE /api/sessions
+  app.delete('/api/sessions', requiresUser, invalidateUserSessionHandler)
 }
