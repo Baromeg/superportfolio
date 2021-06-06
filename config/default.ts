@@ -1,4 +1,5 @@
 // * 1 set up the config file
+require('dotenv').config()
 
 export default {
   port: 5002,
