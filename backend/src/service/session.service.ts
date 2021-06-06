@@ -1,8 +1,9 @@
 // * 13 - Session Service
 
-import { LeanDocument } from 'mongoose'
+import { LeanDocument, FilterQuery, UpdateQuery } from 'mongoose'
 import Session, { SessionDocumentInterface } from '../model/session.model'
 import { UserDocumentInterface } from '../model/user.model'
+import { findUser } from './user.service'
 import config from 'config'
 import { get } from 'lodash'
 import { sign, decode } from '../utils/jwt.utils'
@@ -53,4 +54,11 @@ export async function reIssueAccessToken({
   if (!user) return false
 
   const accessToken = createAccessToken({ user, session })
+}
+
+export async function updateSession(
+  query: FilterQuery<SessionDocumentInterface>,
+  update: UpdateQuery<SessionDocumentInterface>
+) {
+  return Session.updateOne(query, update)
 }

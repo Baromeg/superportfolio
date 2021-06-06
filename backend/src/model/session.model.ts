@@ -5,7 +5,7 @@ import { UserDocumentInterface } from './user.model'
 
 // Interface
 export interface SessionDocumentInterface extends mongoose.Document {
-  email: UserDocumentInterface['_id']
+  user: UserDocumentInterface['_id']
   valid: boolean
   userAgent: string
   createdAt: Date

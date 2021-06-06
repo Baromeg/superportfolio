@@ -1,8 +1,12 @@
 // * 12 - Create Session controllers
 
-import { updateSession, validatePassword } from '../service/user.service'
+import { validatePassword } from '../service/user.service'
 import { Request, Response } from 'express'
-import { createAccessToken, createSession } from '../service/session.service'
+import {
+  createAccessToken,
+  createSession,
+  updateSession
+} from '../service/session.service'
 import config from 'config'
 import { get } from 'lodash'
 import { sign } from '../utils/jwt.utils'

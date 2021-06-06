@@ -16,7 +16,7 @@ export async function createUser(
 }
 
 export async function findUser(query: FilterQuery<UserDocumentInterface>) {
-  return UserModel.findOne(query).lean()
+  return User.findOne(query).lean()
 }
 
 // Validate password
@@ -40,11 +40,4 @@ export async function validatePassword({
   }
 
   return omit(user.toJSON(), 'password')
-}
-
-export async function updateSession(
-  query: FilterQuery<SessionDocumentInterface>,
-  update: UpdateQuery<SessionDocumentInterface>
-) {
-  return Session.updateOne(query, update)
 }

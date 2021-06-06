@@ -3,7 +3,7 @@
 import { get } from 'lodash'
 import { Request, Response, NextFunction } from 'express'
 import { decode } from '../utils/jwt.utils'
-import { reIssueAccesstoken } from '../service/session.service'
+import { reIssueAccessToken } from '../service/session.service'
 
 const deserializerUser = async (
   req: Request,
@@ -21,14 +21,14 @@ const deserializerUser = async (
 
   const { decoded, expired } = decode(accessToken)
 
-  if (decode) {
+  if (decoded) {
     // @ts-ignore
     req.user = decoded
     return next()
   }
 
   if (expired && refreshToken) {
-    const newAccessToken = await reIssueAccesstoken({ refreshToken })
+    const newAccessToken = await reIssueAccessToken({ refreshToken })
 
     if (newAccessToken) {
       // Add the new access token to the response header
