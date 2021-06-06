@@ -14,7 +14,9 @@ export async function createUser(
   }
 }
 
-function findUser() {}
+export async function findUser(query: FilterQuery<UserDocumentInterface>) {
+  return UserModel.findOne(query).lean()
+}
 
 // Validate password
 export async function validatePassword({

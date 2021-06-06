@@ -4,7 +4,8 @@ import { LeanDocument } from 'mongoose'
 import Session, { SessionDocumentInterface } from '../model/session.model'
 import { UserDocumentInterface } from '../model/user.model'
 import config from 'config'
-import { sign } from '../utils/jwt.utils'
+import { get } from 'lodash'
+import { sign, decode } from '../utils/jwt.utils'
 
 export async function createSession(userId: string, userAgent: string) {
   const session = await Session.create({ user: userId, userAgent })
@@ -29,4 +30,27 @@ export function createAccessToken({
     { expiresIn: config.get('accessTokenTtl') }
   )
   return accesstoken
+}
+
+export async function reIssueAccessToken({
+  refreshToken
+}: {
+  refreshToken: string
+}) {
+  // Decoded the refresh token
+  const { decoded } = decode(refreshToken)
+
+  if (!decoded || !get(decoded, '_id')) return false
+
+  // Get the session
+  const session = await Session.findById(get(decoded, '_id'))
+
+  // GMake sure the session is still valid
+  if (!session || !session?.valid) return false
+
+  const user = await findUser({ _id: session.user })
+
+  if (!user) return false
+
+  const accessToken = createAccessToken({ user, session })
 }
