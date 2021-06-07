@@ -30,7 +30,32 @@ export default function (app: Express) {
   // Get the user's sessions
   // GET /api/sessions
   app.get('/api/sessions', requireUser, getUserSessionsHandler)
+
   // Logout
   // DELETE /api/sessions
   app.delete('/api/sessions', requireUser, invalidateUserSessionHandler)
+
+  // Create a project
+  app.post(
+    '/api/projects',
+    [requireUser, validateRequest(createProjectSchema)],
+    createProjectHandler
+  )
+
+  // Update a project
+  app.put(
+    '/api/projects/:projectId',
+    [requireUser, validateRequest(updateProjectSchema)],
+    updateProjectHandler
+  )
+
+  // Get a project
+  app.get('/api/project/:projectId', getPostHandler)
+
+  // Delete a project
+  app.delete(
+    '/api/projects/:projectId',
+    [requireUser, validateRequest(deletePostSchema)],
+    deleteProjectHandler
+  )
 }
