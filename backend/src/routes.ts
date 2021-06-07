@@ -7,8 +7,19 @@ import {
   invalidateUserSessionHandler,
   getUserSessionsHandler
 } from './controller/session.controller'
+import {
+  createProjectHandler,
+  updateProjectHandler,
+  getProjectHandler,
+  deleteProjectHandler
+} from './controller/project.controller'
 import { validateRequest, requireUser } from './middleware'
 import { createUserSchema, createUserSessionSchema } from './schema/user.schema'
+import {
+  createProjectSchema,
+  updateProjectSchema,
+  deleteProjectSchema
+} from './schema/project.schema'
 
 export default function (app: Express) {
   app.get('/healthcheck', (req: Request, res: Response) => res.sendStatus(200))
@@ -50,12 +61,12 @@ export default function (app: Express) {
   )
 
   // Get a project
-  app.get('/api/project/:projectId', getPostHandler)
+  app.get('/api/projects/:projectId', getProjectHandler)
 
   // Delete a project
   app.delete(
     '/api/projects/:projectId',
-    [requireUser, validateRequest(deletePostSchema)],
+    [requireUser, validateRequest(deleteProjectSchema)],
     deleteProjectHandler
   )
 }

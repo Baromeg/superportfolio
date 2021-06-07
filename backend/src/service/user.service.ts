@@ -1,4 +1,4 @@
-// * 7 - Create the service functions
+// * 7 - Create the service Methods
 
 import { omit } from 'lodash'
 import { DocumentDefinition, FilterQuery, UpdateQuery } from 'mongoose'

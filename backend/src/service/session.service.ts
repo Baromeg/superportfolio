@@ -1,4 +1,4 @@
-// * 13 - Session Service
+// * 13 - Session Service Methods
 
 import { LeanDocument, FilterQuery, UpdateQuery } from 'mongoose'
 import Session, { SessionDocumentInterface } from '../model/session.model'
