@@ -3,11 +3,9 @@
 import { omit } from 'lodash'
 import { DocumentDefinition, FilterQuery, UpdateQuery } from 'mongoose'
 import { SessionDocumentInterface } from '../model/session.model'
-import User, { UserDocumentInterface } from '../model/user.model'
+import User, { UserDocumentInterface, UserInput } from '../model/user.model'
 
-export async function createUser(
-  input: DocumentDefinition<UserDocumentInterface>
-) {
+export async function createUser(input: DocumentDefinition<UserInput>) {
   try {
     return await User.create(input)
   } catch (error) {
@@ -25,7 +23,7 @@ export async function validatePassword({
   password
 }: {
   email: UserDocumentInterface['email']
-  password: string
+  password: UserDocumentInterface['password']
 }) {
   const user = await User.findOne({ email })
 
@@ -40,4 +38,8 @@ export async function validatePassword({
   }
 
   return omit(user.toJSON(), 'password')
+}
+
+export async function deleteAllUsers() {
+  return User.deleteMany({})
 }

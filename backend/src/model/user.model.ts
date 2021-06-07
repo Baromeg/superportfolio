@@ -5,9 +5,17 @@ import bcrypt from 'bcrypt'
 import config from 'config'
 
 // Interface
-export interface UserDocumentInterface extends mongoose.Document {
+export interface UserInput {
   email: string
-  name: string
+  firstName: string
+  lastName: string
+  password: string
+}
+export interface UserDocumentInterface extends UserInput, mongoose.Document {
+  email: string
+  firstName: string
+  lastName: string
+  fullName: string
   password: string
   createdAt: Date
   updatedAt: Date
@@ -15,16 +23,25 @@ export interface UserDocumentInterface extends mongoose.Document {
 }
 
 // User Schema
-const UserSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     email: { type: String, require: true, unique: true },
-    name: { type: String, required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String },
     password: { type: String, required: true }
   },
   { timestamps: true }
 )
 
-UserSchema.pre('save', async function (next: mongoose.HookNextFunction) {
+// userSchema.index({ email: 1 })
+
+// Mongoose Virtual Methods
+userSchema.virtual('fullName').get(function (this: UserDocumentInterface) {
+  return `${this.firstName} ${this.lastName}`
+})
+
+// Mongoose PreSave method to hash the password if required
+userSchema.pre('save', async function (next: mongoose.HookNextFunction) {
   let user = this as UserDocumentInterface
 
   // Only hash the password if it has been modified (or is new)
@@ -40,15 +57,15 @@ UserSchema.pre('save', async function (next: mongoose.HookNextFunction) {
   return next()
 })
 
-// Used for logging in
-UserSchema.methods.comparePassword = async function (
+// Used for logging in - Compare a candidate password with the user's password
+userSchema.methods.comparePassword = async function (
   candidatePassword: string
-) {
+): Promise<boolean> {
   const user = this as UserDocumentInterface
   return bcrypt.compare(candidatePassword, user.password).catch((e) => false)
 }
 
 // User Model
-const User = mongoose.model<UserDocumentInterface>('User', UserSchema)
+const User = mongoose.model<UserDocumentInterface>('User', userSchema)
 
 export default User
